@@ -23,14 +23,14 @@ import util from '../components/util/util.module';
 
 import './app.css';
 
-angular.module('gitHubApp', [ngCookies, ngResource, ngSanitize, uiRouter, uiBootstrap, navbar,
+angular.module('configProxy', [ngCookies, ngResource, ngSanitize, uiRouter, uiBootstrap, navbar,
   footer, main, constants, util
 ])
   .config(routeConfig);
 
 angular.element(document)
   .ready(() => {
-    angular.bootstrap(document, ['gitHubApp'], {
+    angular.bootstrap(document, ['configProxy'], {
       strictDi: true
     });
   });

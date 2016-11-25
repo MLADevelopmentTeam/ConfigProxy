@@ -62,7 +62,7 @@ export class MainController {
   }
 }
 
-export default angular.module('gitHubApp.main', [uiRouter])
+export default angular.module('configProxy.main', [uiRouter])
   .config(routing)
   .component('main', {
     template: require('./main.html'),

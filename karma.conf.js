@@ -1,5 +1,5 @@
 // Karma configuration
-// http://karma-runner.github.io/0.13/config/configuration-file.html
+// http://karma-runner.configProxy.io/0.13/config/configuration-file.html
 /*eslint-env node*/
 
 import makeWebpackConfig from './webpack.make';

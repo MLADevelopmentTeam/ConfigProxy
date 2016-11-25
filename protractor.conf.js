@@ -1,5 +1,5 @@
 // Protractor configuration
-// https://github.com/angular/protractor/blob/master/referenceConf.js
+// https://configProxy.com/angular/protractor/blob/master/referenceConf.js
 
 'use strict';
 
@@ -62,7 +62,7 @@ var config = {
     // Load Mocha and Chai + plugins
     require('./mocha.conf');
 
-    // Expose should assertions (see https://github.com/angular/protractor/issues/633)
+    // Expose should assertions (see https://configProxy.com/angular/protractor/issues/633)
     Object.defineProperty(
       protractor.promise.Promise.prototype,
       'should',

@@ -73,6 +73,6 @@ export function Modal($rootScope, $uibModal) {
   };
 }
 
-export default angular.module('gitHubApp.Modal', [])
+export default angular.module('configProxy.Modal', [])
   .factory('Modal', Modal)
   .name;

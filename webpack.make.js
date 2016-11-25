@@ -23,14 +23,14 @@ module.exports = function makeWebpackConfig(options) {
 
     /**
      * Config
-     * Reference: http://webpack.github.io/docs/configuration.html
+     * Reference: http://webpack.configProxy.io/docs/configuration.html
      * This is the object where all configuration gets set
      */
     var config = {};
 
     /**
      * Entry
-     * Reference: http://webpack.github.io/docs/configuration.html#entry
+     * Reference: http://webpack.configProxy.io/docs/configuration.html#entry
      * Should be an empty object if it's generating a test build
      * Karma will set this when it's a test build
      */
@@ -58,7 +58,7 @@ module.exports = function makeWebpackConfig(options) {
 
     /**
      * Output
-     * Reference: http://webpack.github.io/docs/configuration.html#output
+     * Reference: http://webpack.configProxy.io/docs/configuration.html#output
      * Should be an empty object if it's generating a test build
      * Karma will handle setting it up for you when it's a test build
      */
@@ -97,7 +97,7 @@ module.exports = function makeWebpackConfig(options) {
 
     /**
      * Devtool
-     * Reference: http://webpack.github.io/docs/configuration.html#devtool
+     * Reference: http://webpack.configProxy.io/docs/configuration.html#devtool
      * Type of sourcemap to use per build type
      */
     if(TEST) {
@@ -110,8 +110,8 @@ module.exports = function makeWebpackConfig(options) {
 
     /**
      * Loaders
-     * Reference: http://webpack.github.io/docs/configuration.html#module-loaders
-     * List: http://webpack.github.io/docs/list-of-loaders.html
+     * Reference: http://webpack.configProxy.io/docs/configuration.html#module-loaders
+     * List: http://webpack.configProxy.io/docs/list-of-loaders.html
      * This handles most of the magic responsible for converting modules
      */
 
@@ -128,7 +128,7 @@ module.exports = function makeWebpackConfig(options) {
         preLoaders: [],
         loaders: [{
             // JS LOADER
-            // Reference: https://github.com/babel/babel-loader
+            // Reference: https://configProxy.com/babel/babel-loader
             // Transpile .js files using babel-loader
             // Compiles ES6 and ES7 into ES5 code
             test: /\.js$/,
@@ -139,7 +139,7 @@ module.exports = function makeWebpackConfig(options) {
             ]
         }, {
             // TS LOADER
-            // Reference: https://github.com/s-panferov/awesome-typescript-loader
+            // Reference: https://configProxy.com/s-panferov/awesome-typescript-loader
             // Transpile .ts files using awesome-typescript-loader
             test: /\.ts$/,
             loader: 'awesome-typescript-loader',
@@ -151,7 +151,7 @@ module.exports = function makeWebpackConfig(options) {
             ]
         }, {
             // ASSET LOADER
-            // Reference: https://github.com/webpack/file-loader
+            // Reference: https://configProxy.com/webpack/file-loader
             // Copy png, jpg, jpeg, gif, svg, woff, woff2, ttf, eot files to output
             // Rename the file using the asset hash
             // Pass along the updated reference to your code
@@ -161,26 +161,26 @@ module.exports = function makeWebpackConfig(options) {
         }, {
 
             // HTML LOADER
-            // Reference: https://github.com/webpack/raw-loader
+            // Reference: https://configProxy.com/webpack/raw-loader
             // Allow loading html through js
             test: /\.html$/,
             loader: 'raw'
         }, {
             // CSS LOADER
-            // Reference: https://github.com/webpack/css-loader
+            // Reference: https://configProxy.com/webpack/css-loader
             // Allow loading css through js
             //
-            // Reference: https://github.com/postcss/postcss-loader
+            // Reference: https://configProxy.com/postcss/postcss-loader
             // Postprocess your css with PostCSS plugins
             test: /\.css$/,
             loader: !TEST
-                // Reference: https://github.com/webpack/extract-text-webpack-plugin
+                // Reference: https://configProxy.com/webpack/extract-text-webpack-plugin
                 // Extract css files in production builds
                 //
-                // Reference: https://github.com/webpack/style-loader
+                // Reference: https://configProxy.com/webpack/style-loader
                 // Use style-loader in development for hot-loading
                 ? ExtractTextPlugin.extract('style', 'css?sourceMap!postcss')
-                // Reference: https://github.com/webpack/null-loader
+                // Reference: https://configProxy.com/webpack/null-loader
                 // Skip loading css in test mode
                 : 'null'
         }]
@@ -192,7 +192,7 @@ module.exports = function makeWebpackConfig(options) {
     }];
 
     // ISPARTA INSTRUMENTER LOADER
-    // Reference: https://github.com/ColCh/isparta-instrumenter-loader
+    // Reference: https://configProxy.com/ColCh/isparta-instrumenter-loader
     // Instrument JS files with Isparta for subsequent code coverage reporting
     // Skips node_modules and spec files
     if(TEST) {
@@ -212,7 +212,7 @@ module.exports = function makeWebpackConfig(options) {
 
     /**
      * PostCSS
-     * Reference: https://github.com/postcss/autoprefixer-core
+     * Reference: https://configProxy.com/postcss/autoprefixer-core
      * Add vendor prefixes to your css
      */
     config.postcss = [
@@ -223,19 +223,19 @@ module.exports = function makeWebpackConfig(options) {
 
     /**
      * Plugins
-     * Reference: http://webpack.github.io/docs/configuration.html#plugins
-     * List: http://webpack.github.io/docs/list-of-plugins.html
+     * Reference: http://webpack.configProxy.io/docs/configuration.html#plugins
+     * List: http://webpack.configProxy.io/docs/list-of-plugins.html
      */
     config.plugins = [
         /*
          * Plugin: ForkCheckerPlugin
          * Description: Do type checking in a separate process, so webpack don't need to wait.
          *
-         * See: https://github.com/s-panferov/awesome-typescript-loader#forkchecker-boolean-defaultfalse
+         * See: https://configProxy.com/s-panferov/awesome-typescript-loader#forkchecker-boolean-defaultfalse
          */
         new ForkCheckerPlugin(),
 
-        // Reference: https://github.com/webpack/extract-text-webpack-plugin
+        // Reference: https://configProxy.com/webpack/extract-text-webpack-plugin
         // Extract css files
         // Disabled when in test mode or not in build mode
         new ExtractTextPlugin('[name].[hash].css', {
@@ -257,7 +257,7 @@ module.exports = function makeWebpackConfig(options) {
     }
 
     // Skip rendering index.html in test mode
-    // Reference: https://github.com/ampedandwired/html-webpack-plugin
+    // Reference: https://configProxy.com/ampedandwired/html-webpack-plugin
     // Render index.html
     let htmlConfig = {
         template: 'client/_index.html',
@@ -272,15 +272,15 @@ module.exports = function makeWebpackConfig(options) {
     // Add build specific plugins
     if(BUILD) {
         config.plugins.push(
-            // Reference: http://webpack.github.io/docs/list-of-plugins.html#noerrorsplugin
+            // Reference: http://webpack.configProxy.io/docs/list-of-plugins.html#noerrorsplugin
             // Only emit files when there are no errors
             new webpack.NoErrorsPlugin(),
 
-            // Reference: http://webpack.github.io/docs/list-of-plugins.html#dedupeplugin
+            // Reference: http://webpack.configProxy.io/docs/list-of-plugins.html#dedupeplugin
             // Dedupe modules in the output
             new webpack.optimize.DedupePlugin(),
 
-            // Reference: http://webpack.github.io/docs/list-of-plugins.html#uglifyjsplugin
+            // Reference: http://webpack.configProxy.io/docs/list-of-plugins.html#uglifyjsplugin
             // Minify all javascript, switch loaders to minimizing mode
             new webpack.optimize.UglifyJsPlugin({
                 mangle: false,
@@ -292,7 +292,7 @@ module.exports = function makeWebpackConfig(options) {
                 }
             }),
 
-            // Reference: https://webpack.github.io/docs/list-of-plugins.html#defineplugin
+            // Reference: https://webpack.configProxy.io/docs/list-of-plugins.html#defineplugin
             // Define free global variables
             new webpack.DefinePlugin({
                 'process.env': {
@@ -304,7 +304,7 @@ module.exports = function makeWebpackConfig(options) {
 
     if(DEV) {
         config.plugins.push(
-            // Reference: https://webpack.github.io/docs/list-of-plugins.html#defineplugin
+            // Reference: https://webpack.configProxy.io/docs/list-of-plugins.html#defineplugin
             // Define free global variables
             new webpack.DefinePlugin({
                 'process.env': {
@@ -326,8 +326,8 @@ module.exports = function makeWebpackConfig(options) {
 
     /**
      * Dev server configuration
-     * Reference: http://webpack.github.io/docs/configuration.html#devserver
-     * Reference: http://webpack.github.io/docs/webpack-dev-server.html
+     * Reference: http://webpack.configProxy.io/docs/configuration.html#devserver
+     * Reference: http://webpack.configProxy.io/docs/webpack-dev-server.html
      */
     config.devServer = {
         contentBase: './client/',
