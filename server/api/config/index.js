@@ -9,6 +9,14 @@ var overrides = {};
 router.get('/config/combined/:client/:platform/:language?', (req, res) => {
   var client = req.params.client.toLowerCase();
   var platform = req.params.platform.toLowerCase();
+  if(!client || client == 'null' || client == 'undefined' || client == '') {
+    res.status(500).json({error: 'missing client'});
+    return;
+  }
+  if(!platform || platform == 'null' || platform == 'undefined' || platform == '') {
+    res.status(500).json({error: 'missing platform'});
+    return;
+  }
   if(overrides[client] && overrides[client][platform]) {
     res.json(overrides[client][platform]);
     return;

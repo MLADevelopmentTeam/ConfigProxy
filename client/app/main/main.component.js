@@ -7,8 +7,8 @@ export class MainController {
   awesomeThings = [];
   platforms = ['iOS', 'Android'];
   model = {
-    client: window.localStorage.getItem('client') || '',
-    platform: window.localStorage.getItem('platform') || ''
+    client: window.localStorage.getItem('client') || null,
+    platform: window.localStorage.getItem('platform') || null
   };
   error = null;
   message = null;
@@ -104,7 +104,7 @@ export class MainController {
       }
     }, error => {
       this.message = null;
-      this.error = `Could not find the client ${this.model.client}`;
+      this.error = `Could not find the client ${this.model.client || '"unknown"'}`;
       console.error(error);
     });
   }
