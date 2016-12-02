@@ -17,13 +17,38 @@ export function Modal($rootScope, $uibModal) {
     return $uibModal.open({
       template: require('./modal.html'),
       windowClass: modalClass,
-      scope: modalScope
+      scope: modalScope,
+      backdrop: 'static'
     });
   }
 
   // Public API here
   return {
 
+    alert: {
+      spinner() {
+        var modal;
+        modal = openModal({
+          modal: {
+            dismissable: false,
+            title: 'Loading Data',
+            html: 'Please Wait Data Loading...'
+          },
+        });
+        return modal;
+      },
+      notImplemented(func) {
+        var modal;
+        modal = openModal({
+          modal: {
+            dismissable: true,
+            title: 'Not Implemented',
+            html: `<p>${func} has not been implemented</p>`
+          },
+        });
+        return modal;
+      }
+    },
     /* Confirmation modals */
     confirm: {
 
@@ -74,5 +99,5 @@ export function Modal($rootScope, $uibModal) {
 }
 
 export default angular.module('configProxy.Modal', [])
-  .factory('Modal', Modal)
+  .factory('Modal', ['$rootScope', '$uibModal', Modal])
   .name;

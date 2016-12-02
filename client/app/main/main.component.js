@@ -14,9 +14,9 @@ export class MainController {
   message = null;
 
   /*@ngInject*/
-  constructor($http, $uibModal, $location) {
+  constructor($http, $uibModal, $location, Modal) {
     this.$http = $http;
-    this.$uibModal = $uibModal;
+    this.Modal = Modal;
     this.style = $location.search().NeedsMoreCats ? 'background-image:url(http://lorempixel.com/1920/1080/cats/)' : '';
   }
 
@@ -37,10 +37,7 @@ export class MainController {
       });
       builtJSON[element.key] = inner;
     });
-    var modal = this.$uibModal.open({
-      templateUrl: 'app/main/spinner.html',
-      backdrop: 'static'
-    });
+    var modal = this.Modal.alert.spinner();
     this.$http.post(`/config/combined/${this.model.client}/${this.model.platform}`, {
       document: builtJSON
     }).then(response => {
@@ -52,11 +49,11 @@ export class MainController {
   }
 
   clone() {
-    this._notImplemented();
+    this._notImplemented('clone');
   }
 
   sync() {
-    this._notImplemented();
+    this._notImplemented('sync');
   }
 
   remove(outer, inner) {
@@ -71,14 +68,12 @@ export class MainController {
     this.platformSelected();
   }
 
-  _notImplemented() {
-    this.$uibModal.open({
-      templateUrl: 'app/main/modal.html',
-      backdrop: true
-    });
+  _notImplemented(func) {
+    this.Modal.alert.notImplemented(func);
   }
 
   platformSelected() {
+    var modal = this.Modal.alert.spinner();
     this.$http.get(`/config/combined/${this.model.client}/${this.model.platform}`)
     .then(response => {
       window.localStorage.setItem('client', this.model.client);
@@ -102,10 +97,12 @@ export class MainController {
           value: inner
         });
       }
+      modal.close();
     }, error => {
       this.message = null;
       this.error = `Could not find the client ${this.model.client || '"unknown"'}`;
       console.error(error);
+      modal.close();
     });
   }
 
