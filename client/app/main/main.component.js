@@ -17,7 +17,7 @@ export class MainController {
   constructor($http, $uibModal, $location) {
     this.$http = $http;
     this.$uibModal = $uibModal;
-    this.style = $location.search().needsCats ? 'background-image:url(http://lorempixel.com/1920/1080/cats/)' : '';
+    this.style = $location.search().NeedsMoreCats ? 'background-image:url(http://lorempixel.com/1920/1080/cats/)' : '';
   }
 
   addNewValue(outer) {
