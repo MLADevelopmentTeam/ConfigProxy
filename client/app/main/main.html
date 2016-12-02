@@ -1,47 +1,56 @@
 <div class="container-fluid">
-  <h1>Let's manage a config</h1>
-  <form class="form-inline">
-    <div class="form-group">
-      What is the <input class="form-control" type="text" name="client" value="" placeholder="client" ng-model="$ctrl.model.client"
-        ng-blur="$ctrl.platformSelected()"> and for which
-      <select class="form-control" ng-model="$ctrl.model.platform" ng-change="$ctrl.platformSelected()" ng-options="p as p for p in $ctrl.platforms">
-      </select>?
-      Or
-      <button class="btn btn-primary">Clone to</button> <input class="form-control" type="text" placeholder="new test client">
-      Or
-      <button class="btn btn-warning">Sync</button>
+  <div class="row">
+    <div class="col-lg-12">
+      <a name="Top"></a>
+      <h1>Let's manage a config</h1>
+      <form class="form-inline">
+        <div class="form-group">
+          What is the <input class="form-control" type="text" name="client" value="" placeholder="client" ng-model="$ctrl.model.client"
+            ng-blur="$ctrl.platformSelected()"> &amp;
+          <select class="form-control" ng-model="$ctrl.model.platform" ng-change="$ctrl.platformSelected()" ng-options="p as p for p in $ctrl.platforms">
+      </select>? Or
+          <input class="form-control" type="text" placeholder="Enter name" ng-model="$ctrl.model.cloneClient"> &amp;
+          <select class="form-control" ng-model="$ctrl.model.clonePlatform" ng-options="p as p for p in $ctrl.platforms">
+      </select> to
+          <button class="btn btn-primary" ng-click="$ctrl.clone()">Duplicate</button> Or
+          <button class="btn btn-warning" ng-click="$ctrl.sync()">Sync</button>
+        </div>
+      </form>
+      <hr />
     </div>
-  </form>
+  </div>
 </div>
 <div class="container-fluid">
   <div class="row">
     <div class="col-lg-12">
       <h3 class="text-info">{{$ctrl.error}}</h3>
-      <hr />
       <form class="form">
-        <fieldset class="form-group" ng-repeat="outer in $ctrl.message">
-          <legend>{{outer.key}}
-            <input class="input-sm" type="text" placeholder="filter" ng-model="$ctrl.innerFilter">
-            <button class="btn" type="button">Set as override</button>
+        <div class="form-group" ng-repeat="outer in $ctrl.message">
+          <a name="{{outer.key}}"></a>
+          <div>
+            <h3>{{outer.key}}</h3>
+            <input class="form-control" style="display: inline; width: auto;" type="text" placeholder="filter" ng-model="$ctrl.innerFilter">
+            <button class="btn" type="button" ng-click="$ctrl.save()">Set as override</button>
             <button class="btn btn-success" type="button" ng-click="$ctrl.addNewValue(outer)">+</button>
-          </legend>
-          <div ng-repeat="inner in outer.value | filter:{key:$ctrl.innerFilter}" class="form-group col-lg-3">
+          </div>
+          <hr />
+          <div ng-repeat="inner in outer.value | orderBy:['isNew','key'] | filter:{key:$ctrl.innerFilter}" class="form-group col-lg-3">
             <input type="text" class="form-control" style="display: inline; width: 87%; font-weight:bold" ng-model="inner.key">
-            <button class="btn btn-sm btn-danger pull-right">-</button>
+            <button class="btn btn-sm btn-danger pull-right" ng-click="$ctrl.remove(outer, inner)">-</button>
             <input class="form-control" type="text" ng-model="inner.value">
           </div>
-        <fieldset>
       </form>
+      </div>
     </div>
   </div>
-</div>
-<div class="container-fluid">
-  <div class="row">
-    <div class="col-lg-12">
-      <h1 class="page-header">Last configs managed:</h1>
-      <ul class="nav nav-tabs nav-stacked col-md-4 col-lg-4 col-sm-6" ng-repeat="thing in $ctrl.awesomeThings">
-        <li><a href="#" uib-tooltip="{{thing.info}}">{{thing.name}}</a></li>
-      </ul>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <h1 class="page-header">Last configs managed:</h1>
+        <a name="History"></a>
+        <ul class="nav nav-tabs nav-stacked col-md-4 col-lg-4 col-sm-6" ng-repeat="thing in $ctrl.awesomeThings">
+          <li><a href="#" ng-click="$ctrl.load(thing)">{{thing.client}} - {{thing.platform}}</a></li>
+        </ul>
+      </div>
     </div>
   </div>
-</div>

@@ -14,23 +14,78 @@ export class MainController {
   message = null;
 
   /*@ngInject*/
-  constructor($http) {
+  constructor($http, $uibModal) {
     this.$http = $http;
+    this.$uibModal = $uibModal;
   }
 
   addNewValue(outer) {
     outer.value.splice(0, 0, {
-      key: 'Newbie',
-      value: 'A whole lot of value'
+      key: 'new_key',
+      value: 'A whole lot of value',
+      isNew: true
     });
   }
+
+  save() {
+    var builtJSON = {};
+    this.message.forEach(element => {
+      var inner = {};
+      element.value.forEach(ie => {
+        inner[ie.key] = ie.value;
+      });
+      builtJSON[element.key] = inner;
+    });
+    var modal = this.$uibModal.open({
+      templateUrl: 'app/main/spinner.html',
+      backdrop: 'static'
+    });
+    this.$http.post(`/config/combined/${this.model.client}/${this.model.platform}`, {
+      document: builtJSON
+    }).then(response => {
+      this.awesomeThings = response.data.result;
+      modal.close();
+    }, error => {
+      modal.close();
+    });
+  }
+
+  clone() {
+    this._notImplemented();
+  }
+
+  sync() {
+    this._notImplemented();
+  }
+
+  remove(outer, inner) {
+    var innerArray = this.message[this.message.indexOf(outer)].value;
+    var index = innerArray.indexOf(inner);
+    innerArray.splice(index, 1);
+  }
+
+  load(thing) {
+    this.model.client = thing.client;
+    this.model.platform = thing.platform;
+    this.platformSelected();
+  }
+
+  _notImplemented() {
+    this.$uibModal.open({
+      templateUrl: 'app/main/modal.html',
+      backdrop: true
+    });
+  }
+
   platformSelected() {
-    this.$http.get(`/api/configs/${this.model.client}/${this.model.platform}`)
+    this.$http.get(`/config/combined/${this.model.client}/${this.model.platform}`)
     .then(response => {
       window.localStorage.setItem('client', this.model.client);
       window.localStorage.setItem('platform', this.model.platform);
       this.error = null;
       this.message = [];
+      this.model.cloneClient = this.model.client;
+      this.model.clonePlatform = this.platforms.filter(p => p != this.model.platform)[0];
       for(var prop in response.data) {
         var type = response.data[prop];
         var inner = [];
@@ -55,9 +110,9 @@ export class MainController {
 
   $onInit() {
     this.platformSelected();
-    this.$http.get('/api/things')
+    this.$http.get('/config')
       .then(response => {
-        this.awesomeThings = response.data;
+        this.awesomeThings = response.data.result;
       });
   }
 }
