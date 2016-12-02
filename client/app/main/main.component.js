@@ -14,9 +14,10 @@ export class MainController {
   message = null;
 
   /*@ngInject*/
-  constructor($http, $uibModal) {
+  constructor($http, $uibModal, $location) {
     this.$http = $http;
     this.$uibModal = $uibModal;
+    this.style = $location.search().needsCats ? 'background-image:url(http://lorempixel.com/1920/1080/cats/)' : '';
   }
 
   addNewValue(outer) {
