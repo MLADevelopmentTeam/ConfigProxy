@@ -5,10 +5,11 @@ import routing from './main.routes';
 export class MainController {
 
   awesomeThings = [];
-  platforms = ['iOS', 'Android'];
+  platforms = ['ios', 'android'];
   model = {
     client: window.localStorage.getItem('client') || null,
-    platform: window.localStorage.getItem('platform') || null
+    platform: window.localStorage.getItem('platform') || null,
+    cloneName: null
   };
   error = null;
   message = null;
@@ -49,7 +50,25 @@ export class MainController {
   }
 
   clone() {
-    this._notImplemented('clone');
+    var builtJSON = {};
+    this.message.forEach(element => {
+      var inner = {};
+      element.value.forEach(ie => {
+        inner[ie.key] = ie.value;
+      });
+      builtJSON[element.key] = inner;
+    });
+    var modal = this.Modal.alert.spinner();
+    this.$http.post(`/MLS${this.model.cloneName}/config/combined/${this.model.client}/${this.model.platform}`, {
+      document: builtJSON
+    }).then(response => {
+      this.awesomeThings = response.data.result;
+      this.model.client = 'MLS'+this.model.cloneName;
+      this.model.cloneName = null;
+      modal.close();
+    }, error => {
+      modal.close();
+    });
   }
 
   sync() {
@@ -79,24 +98,8 @@ export class MainController {
       window.localStorage.setItem('client', this.model.client);
       window.localStorage.setItem('platform', this.model.platform);
       this.error = null;
-      this.message = [];
-      this.model.cloneClient = this.model.client;
-      this.model.clonePlatform = this.platforms.filter(p => p != this.model.platform)[0];
-      for(var prop in response.data) {
-        var type = response.data[prop];
-        var inner = [];
-        for(var p in type) {
-          var o = {
-            key: p,
-            value: type[p]
-          };
-          inner.push(o);
-        }
-        this.message.push({
-          key: prop,
-          value: inner
-        });
-      }
+      this.message = response.data;
+      this.model.cloneName = null;
       modal.close();
     }, error => {
       this.message = null;

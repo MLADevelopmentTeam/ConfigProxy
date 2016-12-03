@@ -6,9 +6,12 @@ var router = express.Router();
 
 var overrides = {};
 
-router.get('/config/combined/:client/:platform/:language?', (req, res) => {
+router.get('/:cloneName?/config/combined/:client/:platform/:language?', (req, res) => {
+  var cloneName = req.params.cloneName;
   var client = req.params.client.toLowerCase();
   var platform = req.params.platform.toLowerCase();
+  var lang = req.params.language;
+  console.log(req.params);
   if(!client || client == 'null' || client == 'undefined' || client == '') {
     res.status(500).json({error: 'missing client'});
     return;
@@ -17,8 +20,23 @@ router.get('/config/combined/:client/:platform/:language?', (req, res) => {
     res.status(500).json({error: 'missing platform'});
     return;
   }
+  var toRespond = null;
+  if(cloneName && overrides[cloneName.toLowerCase()] && overrides[cloneName.toLowerCase()][platform]) {
+    toRespond = overrides[cloneName.toLowerCase()][platform];
+    if(lang) {
+      res.json(toRespond);
+    } else {
+      res.json(createArray(toRespond));
+    }
+    return;
+  }
   if(overrides[client] && overrides[client][platform]) {
-    res.json(overrides[client][platform]);
+    toRespond = overrides[client][platform];
+    if(lang) {
+      res.json(toRespond);
+    } else {
+      res.json(createArray(toRespond));
+    }
     return;
   }
   http
@@ -27,7 +45,11 @@ router.get('/config/combined/:client/:platform/:language?', (req, res) => {
         console.log('Fail!', response);
         res.status(500).json({error});
       } else {
-        res.json(JSON.parse(body));
+        var obj = JSON.parse(body);
+        if(!lang) {
+          obj = createArray(obj);
+        }
+        res.json(obj);
       }
     });
 });
@@ -39,17 +61,45 @@ router.get('/config', (req, res) => {
   });
 });
 
-router.post('/config/combined/:client/:platform', (req, res) => {
+router.post('/:cloneName?/config/combined/:client/:platform', (req, res) => {
+  var cloneName = req.params.cloneName;
   var client = req.params.client.toLowerCase();
   var platform = req.params.platform.toLowerCase();
-  var temp = overrides[client] || {
-  };
+  var temp = null;
+  var key = null;
+  if(cloneName) {
+    key = cloneName.toLowerCase();
+    temp = overrides[key] || {};
+  } else {
+    key = client;
+    temp = overrides[client] || {};
+  }
   temp[platform] = req.body.document;
-  overrides[client] = temp;
+  overrides[key] = temp;
   res.status(200).json({
     result: mapData()
   });
 });
+
+function createArray(response) {
+  var message = [];
+  for(var prop in response) {
+    var type = response[prop];
+    var inner = [];
+    for(var p in type) {
+      var o = {
+        key: p,
+        value: type[p]
+      };
+      inner.push(o);
+    }
+    message.push({
+      key: prop,
+      value: inner
+    });
+  }
+  return message;
+}
 
 function mapData() {
   var response = [];
