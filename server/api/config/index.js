@@ -13,11 +13,11 @@ router.get('/:cloneName?/config/combined/:client/:platform/:language?', (req, re
   var lang = req.params.language;
   console.log(req.params);
   if(!client || client == 'null' || client == 'undefined' || client == '') {
-    res.status(500).json({error: 'missing client'});
+    res.status(400).json({error: 'missing client'});
     return;
   }
   if(!platform || platform == 'null' || platform == 'undefined' || platform == '') {
-    res.status(500).json({error: 'missing platform'});
+    res.status(400).json({error: 'missing platform'});
     return;
   }
   var toRespond = null;
@@ -52,6 +52,23 @@ router.get('/:cloneName?/config/combined/:client/:platform/:language?', (req, re
         res.json(obj);
       }
     });
+});
+
+router.delete('/:cloneName?/config/combined/:client/:platform/:language?', (req, res) => {
+  var client = req.params.client.toLowerCase();
+  var platform = req.params.platform.toLowerCase();
+  var c = overrides[client];
+  if(c) {
+    delete c[platform];
+    if(Object.keys(c).length == 0) {
+      delete overrides[client];
+    }
+    res.json({
+      result: mapData()
+    });
+    return;
+  }
+  res.status(404).JSON();
 });
 
 router.get('/config', (req, res) => {

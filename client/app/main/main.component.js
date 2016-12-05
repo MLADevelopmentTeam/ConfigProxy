@@ -39,7 +39,7 @@ export class MainController {
       builtJSON[element.key] = inner;
     });
     var modal = this.Modal.alert.spinner();
-    this.$http.post(`/config/combined/${this.model.client}/${this.model.platform}`, {
+    this.$http.post(`/config/combined/${this.model.client || undefined}/${this.model.platform || undefined}`, {
       document: builtJSON
     }).then(response => {
       this.awesomeThings = response.data.result;
@@ -59,11 +59,11 @@ export class MainController {
       builtJSON[element.key] = inner;
     });
     var modal = this.Modal.alert.spinner();
-    this.$http.post(`/MLS${this.model.cloneName}/config/combined/${this.model.client}/${this.model.platform}`, {
+    this.$http.post(`/MLS${this.model.cloneName}/config/combined/${this.model.client || undefined}/${this.model.platform || undefined}`, {
       document: builtJSON
     }).then(response => {
       this.awesomeThings = response.data.result;
-      this.model.client = 'MLS'+this.model.cloneName;
+      this.model.client = `MLS${this.model.cloneName}`;
       this.model.cloneName = null;
       modal.close();
     }, error => {
@@ -91,9 +91,21 @@ export class MainController {
     this.Modal.alert.notImplemented(func);
   }
 
+  removeOverride() {
+    var modal = this.Modal.alert.spinner();
+    this.$http.delete(`/config/combined/${this.model.client || undefined}/${this.model.platform || undefined}`)
+    .then(response => {
+      this.awesomeThings = response.data.result;
+      modal.close();
+    }, error => {
+      console.error(error);
+      modal.close();
+    });
+  }
+
   platformSelected() {
     var modal = this.Modal.alert.spinner();
-    this.$http.get(`/config/combined/${this.model.client}/${this.model.platform}`)
+    this.$http.get(`/config/combined/${this.model.client || undefined}/${this.model.platform || undefined}`)
     .then(response => {
       window.localStorage.setItem('client', this.model.client);
       window.localStorage.setItem('platform', this.model.platform);

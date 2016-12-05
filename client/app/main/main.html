@@ -4,7 +4,7 @@
       <a name="Top"></a>
       <h1>Let's manage a config</h1>
       <form class="form-inline">
-        <fieldset class="form-group col-lg-6">
+        <fieldset class="form-group col-md-6">
           <legend>
             Lookup
           </legend>
@@ -18,14 +18,14 @@
           <button class="btn btn-primary btn-block" ng-click="$ctrl.platformSelected()">Find</button>
           <button class="btn btn-warning btn-block" ng-click="$ctrl.removeOverride()">Remove</button>
         </fieldset>
-        <fieldset class="form-group col-lg-6">
+        <fieldset class="form-group col-md-6">
           <legend>
             Utilities
           </legend>
           <div>
             <div class="row">
-          <label class="col-lg-2">Reference Name</label>
-          <div class="col-lg-10">
+          <label class="col-sm-3">Dup. Name</label>
+          <div class="col-sm-9">
           <input class="form-control" style="display: block; width: 100%" type="text" placeholder="Enter name" ng-model="$ctrl.model.cloneName">
           </div>
             </div>
