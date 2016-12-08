@@ -72,7 +72,11 @@ router.delete('/:cloneName?/config/combined/:client/:platform/:language?', (req,
 });
 
 router.get('/config', (req, res) => {
+  let platform = req.query.platform;
   var response = mapData();
+  if(platform) {
+    response = response.filter(i => i.platform == platform).map(i => i.client);
+  }
   res.json({
     result: response
   });
