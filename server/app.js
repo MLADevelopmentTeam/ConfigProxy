@@ -1,7 +1,3 @@
-/**
- * Main application file
- */
-
 'use strict';
 
 import express from 'express';
@@ -11,7 +7,10 @@ import http from 'http';
 // Setup server
 var app = express();
 var server = http.createServer(app);
+var WebSocketServer = require('ws').Server;
+var wss = new WebSocketServer({server});
 require('./config/express').default(app);
+require('./components/services/websocket').setup(wss);
 require('./routes').default(app);
 
 // Start server
