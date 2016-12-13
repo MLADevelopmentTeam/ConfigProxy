@@ -2,7 +2,8 @@
 
 var express = require('express');
 var http = require('request');
-var data = require('../../components/services/data');
+var DB = require('../../components/services/data').DB;
+var data = new DB('override');
 var ws = require('../../components/services/websocket');
 export default function() {
   var router = express.Router();
@@ -75,7 +76,7 @@ export default function() {
         if(Object.keys(c).length == 0) {
           overrides[client] = null;
         }
-        return data.update(overrides)
+        return data.update({_id: overrides._id}, overrides)
           .then(() => {
             const d = mapData(overrides);
             ws.broadcast({platform, client}, JSON.stringify({
@@ -126,7 +127,7 @@ export default function() {
       var temp = overrides[key] || {};
       temp[platform] = req.body.document;
       overrides[key] = temp;
-      return data.update(overrides)
+      return data.update({_id: overrides._id}, overrides)
         .then(() => {
           const d = mapData(overrides);
           ws.broadcast({platform, client: key}, JSON.stringify({
