@@ -1,0 +1,50 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-lg-12">
+      <h1>Services To Intercept</h1>
+      <hr />
+      <ul class="nav nav-tabs nav-stacked col-md-4 col-lg-4 col-sm-6" ng-repeat="service in $ctrl.services">
+        <li><a href="#" ng-click="$ctrl.load(service)">{{service.name}}</a></li>
+      </ul>
+    </div>
+  </div>
+  <form ng-show="$ctrl.model">
+    <div class="row">
+      <div class="col-lg-12">
+        <h2>{{$ctrl.model.uri}}</h2>
+        <div class="row">
+          <div class="col-lg-12">
+            <b>Current Intercepts:</b>
+            <div class="btn-group" role="group" ng-repeat="intercept in $ctrl.intercepts" style="margin-right: 5px;">
+              <button class="btn btn-primary" ng-click="$ctrl.enableIntercept(intercept)" ng-class="{active:intercept.active}">{{intercept.name}}</button>
+              <button class="btn btn-default" ng-click="$ctrl.editIntercept(intercept)">edit</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <hr />
+    <div class="row">
+      <div class="col-lg-12">
+        <label>Current Interceptor:</label>
+        <div class="input-group">
+          <input type="text" class="form-control" placeholder="Intercept Name" ng-model="$ctrl.model.name" />
+          <span class="input-group-addon">
+                <input type="checkbox" ng-model="$ctrl.model.active">
+              </span>
+          <span class="input-group-btn">
+                <button type="submit" class="btn btn-primary" ng-click="$ctrl.createIntercept()">Save</button>
+                <button type="submit" class="btn btn-info" ng-click="$ctrl.resetIntercept()">Reset</button>
+                <button type="submit" class="btn btn-warning" ng-click="$ctrl.deleteIntercept()">Delete</button>
+              </span>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-12">
+        <label>Response:</label>
+        <textarea class="form-control" style="width: 100%" rows="30" ng-model="$ctrl.model.response"></textarea>
+      </div>
+    </div>
+  </form>
+</div>
