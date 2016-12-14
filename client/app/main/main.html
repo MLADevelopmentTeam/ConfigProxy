@@ -9,11 +9,11 @@
             Lookup
           </legend>
           <div>
-          <label>Client</label>
-          <input class="form-control" type="text" name="client" value="" placeholder="client" ng-model="$ctrl.model.client">          
-          <label>Platform</label>
-          <select class="form-control" ng-model="$ctrl.model.platform" ng-options="p as p for p in $ctrl.platforms"></select>
-          </div> 
+            <label>Client</label>
+            <input class="form-control" type="text" name="client" value="" placeholder="client" ng-model="$ctrl.model.client">
+            <label>Platform</label>
+            <select class="form-control" ng-model="$ctrl.model.platform" ng-options="p as p for p in $ctrl.platforms"></select>
+          </div>
           <br />
           <button class="btn btn-primary btn-block" ng-click="$ctrl.platformSelected()">Find</button>
           <button class="btn btn-warning btn-block" ng-click="$ctrl.removeOverride()">Remove</button>
@@ -24,21 +24,21 @@
           </legend>
           <div>
             <div class="row">
-          <label class="col-sm-3">Dup. Name</label>
-          <div class="col-sm-9">
-          <input class="form-control" style="display: block; width: 100%" type="text" placeholder="Enter name" ng-model="$ctrl.model.cloneName">
-          </div>
+              <label class="col-sm-3">Dup. Name</label>
+              <div class="col-sm-9">
+                <input class="form-control" style="display: block; width: 100%" type="text" placeholder="Enter name" ng-model="$ctrl.model.cloneName">
+              </div>
             </div>
           </div> <br />
           <div>
-          <button class="btn btn-primary btn-block" ng-click="$ctrl.clone()">Duplicate</button>
-          <button class="btn btn-warning btn-block" ng-click="$ctrl.sync()">Sync</button>
+            <button class="btn btn-primary btn-block" ng-click="$ctrl.clone()">Duplicate</button>
+            <button class="btn btn-warning btn-block" ng-click="$ctrl.sync()">Sync</button>
           </div>
         </fieldset>
-    </form>
-    <hr />
+      </form>
+      <hr />
+    </div>
   </div>
-</div>
 </div>
 <div class="container-fluid" style="{{$ctrl.style}}">
   <div class="row">
@@ -62,15 +62,20 @@
       </form>
       </div>
     </div>
+    <!--<div class="col-lg-4">
+      <iframe src="https://appetize.io/embed/r6n8nrghd70xaqkuag9tu1695w?device=iphone5s&scale=100&autoplay=false&orientation=portrait&deviceColor=black"
+        height="800px" width="378px" frameborder="0" scrolling="no"></iframe>
+    </div>-->
   </div>
-  <div class="container-fluid">
-    <div class="row">
-      <div class="col-lg-12">
-        <h1 class="page-header">Last configs managed:</h1>
-        <a name="History"></a>
-        <ul class="nav nav-tabs nav-stacked col-md-4 col-lg-4 col-sm-6" ng-repeat="thing in $ctrl.awesomeThings">
-          <li><a href="#" ng-click="$ctrl.load(thing)">{{thing.client}} - {{thing.platform}}</a></li>
-        </ul>
-      </div>
+</div>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-lg-12">
+      <h1 class="page-header">Last configs managed:</h1>
+      <a name="History"></a>
+      <ul class="nav nav-tabs nav-stacked col-md-4 col-lg-4 col-sm-6" ng-repeat="thing in $ctrl.awesomeThings">
+        <li><a href="#" ng-click="$ctrl.load(thing)">{{thing.client}} - {{thing.platform}}</a></li>
+      </ul>
     </div>
   </div>
+</div>

@@ -7,6 +7,7 @@ var DB = require('../../components/services/data').DB;
 var data = new DB('template');
 var ObjectId = require('mongodb').ObjectID;
 var intercepts = new DB('intercept');
+var q = require('q');
 
 const baseUrl = '/axes103/rest';
 const originalUrl = 'https://retailuat.alldata.net/axes103/rest';
@@ -26,32 +27,45 @@ export default function() {
       json: true,
       uri
     };
-    data.find({uri}).then(result => {
-      let template = result[0];
+    let request = clone(req.body);
+    delete request.mediation.clientHeader.timeStamp;
+    var templatePromise = data.find({uri});
+    var interceptPromise = intercepts.find({uri, active: true});
+    q.all([templatePromise, interceptPromise])
+    .then(values => {
+      let template = values[0][0];
       if(!template) {
         template = {
           uri,
-          request: req.body,
+          request,
           response: null
         };
       }
+      let intercept = values[1][0];
       http(options, (error, response, body) => {
         if(error) {
           resp.status(500).json({});
         } else {
-          template.response = body;
-          let promise = null;
-          if(template._id) {
-            promise = data.update({id: template._id}, template);
+          if(!intercept) {
+            let bodyClone = clone(body);
+            delete bodyClone.response.sessionID;
+            template.response = bodyClone;
+            data.save(template)
+            .then(null, er => {
+              console.error(er);
+            });
           } else {
-            promise = data.insert(template);
+            let interceptResponse = JSON.parse(intercept.response);
+            interceptResponse.response.sessionID = body.response.sessionID;
+            body = interceptResponse;
           }
-          promise.then(null, er => {
-            console.error(er);
-          });
           resp.status(response.statusCode).json(body);
         }
       });
+    })
+    .then(null, error => {
+      console.error(error);
+      resp.status(500).json({ error });
     });
   });
   router.get(`${baseUrl}/templates`, (req, res) => {
@@ -72,13 +86,61 @@ export default function() {
     });
   });
   router.post(`${baseUrl}/templates`, (req, res) => {
-    var promise = null;
-    if(req.body._id) {
-      promise = data.update({id: req._id}, req.body);
-    } else {
-      promise = data.insert(req.body);
+    data.save(req.body)
+    .then(() => findAll())
+    .then(null, error => {
+      console.error(error);
+      res.status(500).json({ error });
+    });
+  });
+  router.delete(`${baseUrl}/templates`, (req, res) => {
+    data.delete(req.body._id)
+    .then(() => findAll())
+    .then(null, error => {
+      console.error(error);
+      res.status(500).json({ error });
+    });
+  });
+  router.get(`${baseUrl}/intercept`, (req, res) => {
+    const id = req.query.id;
+    const uri = req.query.uri;
+    let filter = null;
+    if(id) {
+      filter = {_id: new ObjectId(req.params.id)};
+    } else if(uri) {
+      filter = {uri};
     }
-    promise.then(() => findAll())
+    intercepts.find(filter)
+    .then(result => {
+      res.json(result);
+    })
+    .then(null, error => {
+      console.error(error);
+      res.status(500).json({ error });
+    });
+  });
+  router.post(`${baseUrl}/intercept`, (req, res) => {
+    if(req.body.active) {
+      intercepts.update({uri: req.body.uri}, {active: false});
+    }
+    intercepts.save(req.body)
+    .then(() => intercepts.find({uri: req.body.uri}))
+    .then(result => {
+      res.json(result);
+    })
+    .then(null, error => {
+      console.error(error);
+      res.status(500).json({ error });
+    });
+  });
+  router.delete(`${baseUrl}/intercept/:id`, (req, res) => {
+    const id = req.params.id;
+    const uri = req.query.uri;
+    intercepts.delete(id)
+    .then(() => intercepts.find({uri}))
+    .then(result => {
+      res.json(result);
+    })
     .then(null, error => {
       console.error(error);
       res.status(500).json({ error });
@@ -86,7 +148,9 @@ export default function() {
   });
   return router;
 }
-
+function clone(obj) {
+  return JSON.parse(JSON.stringify(obj));
+}
 function findAll(res) {
   return data.find().then(result => {
     res.json(result.map(i => {

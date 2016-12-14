@@ -19,13 +19,14 @@ import navbar from '../components/navbar/navbar.component';
 import modal from '../components/modal/modal.service';
 import footer from '../components/footer/footer.component';
 import main from './main/main.component';
+import services from './services/services.component';
 import constants from './app.constants';
 import util from '../components/util/util.module';
 
 import './app.css';
 
 angular.module('configProxy', [ngCookies, ngResource, ngSanitize, uiRouter, uiBootstrap, navbar,
-  footer, modal, main, constants, util
+  footer, modal, main, services, constants, util
 ])
   .config(routeConfig);
 

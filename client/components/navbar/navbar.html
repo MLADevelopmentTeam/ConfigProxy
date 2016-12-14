@@ -12,7 +12,8 @@
     <div uib-collapse="$ctrl.isCollapsed" class="navbar-collapse collapse" id="navbar-main">
       <ul class="nav navbar-nav">
         <li ng-repeat="item in $ctrl.menu" ui-sref-active="active">
-            <a href="#{{item.state}}">{{item.title}}</a>
+            <a ng-if="item.state != 'Services'" href="#{{item.state}}">{{item.title}}</a>
+            <a ng-if="item.state == 'Services'" ui-sref="services">| {{item.title}}</a>
         </li>
       </ul>
     </div>

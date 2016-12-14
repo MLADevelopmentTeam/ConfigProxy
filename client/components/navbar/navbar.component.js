@@ -23,6 +23,10 @@ export class NavbarComponent {
   {
     title: 'Functional',
     state: 'Functional'
+  },
+  {
+    title: 'Services',
+    state: 'Services'
   }];
   isCollapsed = true;
 
