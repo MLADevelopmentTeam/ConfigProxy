@@ -13,6 +13,11 @@ export class MainController {
   };
   error = null;
   message = null;
+  innerFilter = null;
+  design = true;
+  code = false;
+  codeModel = '{}';
+  numberOfRows = 30;
 
   /*@ngInject*/
   constructor($http, $uibModal, $location, Modal) {
@@ -29,35 +34,32 @@ export class MainController {
     });
   }
 
+  modeChange(mode) {
+    this.design = mode == 'design';
+    this.code = mode == 'code';
+    if(this.code) {
+      this.codeModel = JSON.stringify(this.buildJSON(this.message), null, 4);
+      this.numberOfRows = this.codeModel.split('\n').length + 100;
+    } else {
+      this.message = this.buildArray(this.codeModel);
+    }
+  }
+
   save() {
-    var builtJSON = {};
-    this.message.forEach(element => {
-      var inner = {};
-      element.value.forEach(ie => {
-        inner[ie.key] = ie.value;
-      });
-      builtJSON[element.key] = inner;
-    });
+    var builtJSON = this._prepareForSave();
     var modal = this.Modal.alert.spinner();
     this.$http.post(`/config/combined/${this.model.client || undefined}/${this.model.platform || undefined}`, {
       document: builtJSON
     }).then(response => {
       this.awesomeThings = response.data.result;
       modal.close();
-    }, error => {
+    }, () => {
       modal.close();
     });
   }
 
   clone() {
-    var builtJSON = {};
-    this.message.forEach(element => {
-      var inner = {};
-      element.value.forEach(ie => {
-        inner[ie.key] = ie.value;
-      });
-      builtJSON[element.key] = inner;
-    });
+    var builtJSON = this._prepareForSave();
     var modal = this.Modal.alert.spinner();
     this.$http.post(`/MLS${this.model.cloneName}/config/combined/${this.model.client || undefined}/${this.model.platform || undefined}`, {
       document: builtJSON
@@ -66,9 +68,43 @@ export class MainController {
       this.model.client = `MLS${this.model.cloneName}`;
       this.model.cloneName = null;
       modal.close();
-    }, error => {
+    }, () => {
       modal.close();
     });
+  }
+
+
+  buildArray(code) {
+    let obj = JSON.parse(code);
+    let outer = [];
+    for(var prop in obj) {
+      var element = obj[prop];
+      let inner = [];
+      for(var innerProp in element) {
+        var innerElement = element[innerProp];
+        inner.push({
+          key: innerProp,
+          value: innerElement
+        });
+      }
+      outer.push({
+        key: prop,
+        value: inner
+      });
+    }
+    return outer;
+  }
+
+  buildJSON(message) {
+    var builtJSON = {};
+    message.forEach(element => {
+      var inner = {};
+      element.value.forEach(ie => {
+        inner[ie.key] = ie.value;
+      });
+      builtJSON[element.key] = inner;
+    });
+    return builtJSON;
   }
 
   sync() {
@@ -89,6 +125,19 @@ export class MainController {
 
   _notImplemented(func) {
     this.Modal.alert.notImplemented(func);
+  }
+
+  _prepareForSave() {
+    var builtJSON = null;
+    if(this.code) {
+      builtJSON = JSON.parse(this.codeModel);
+      this.message = this.buildArray(this.codeModel);
+    } else {
+      builtJSON = this.buildJSON(this.message);
+      this.codeModel = JSON.stringify(builtJSON, null, 4);
+      this.numberOfRows = this.codeModel.split('\n').length + 100;
+    }
+    return builtJSON;
   }
 
   removeOverride() {
@@ -131,6 +180,18 @@ export class MainController {
 }
 
 export default angular.module('configProxy.main', [uiRouter])
+  .filter('newWithFilter', function() {
+    return function(items, search) {
+      var filtered = [];
+      for(var i = 0; i < items.length; i++) {
+        var item = items[i];
+        if(!search || item.key.toLowerCase().includes(search.toLowerCase()) || item.isNew) {
+          filtered.push(item);
+        }
+      }
+      return filtered;
+    };
+  })
   .config(routing)
   .component('main', {
     template: require('./main.html'),

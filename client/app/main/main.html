@@ -40,7 +40,18 @@
     </div>
   </div>
 </div>
+<hr />
 <div class="container-fluid" style="{{$ctrl.style}}">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="btn-group" style="display: block;" role="group">
+        <button type="button" style="width:50%" class="btn btn-primary" ng-class="{active:$ctrl.design}" ng-click="$ctrl.modeChange('design')">Design</button>
+        <button type="button" style="width:50%" class="btn btn-success" ng-class="{active:$ctrl.code}" ng-click="$ctrl.modeChange('code')">Code</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container-fluid" style="{{$ctrl.style}}" ng-show="$ctrl.design">
   <div class="row">
     <div class="col-lg-12">
       <h3 class="text-info">{{$ctrl.error}}</h3>
@@ -54,11 +65,12 @@
             <button class="btn btn-success" type="button" ng-click="$ctrl.addNewValue(outer)">+</button>
           </div>
           <hr />
-          <div ng-repeat="inner in outer.value | orderBy:['isNew','key'] | filter:{key:$ctrl.innerFilter}" class="form-group col-lg-3 form-group col-md-4">
+          <div ng-repeat="inner in outer.value | orderBy:['isNew','key'] | newWithFilter:$ctrl.innerFilter" class="form-group col-lg-3 col-md-4">
             <input type="text" class="form-control" style="display: inline; width: 87%; font-weight:bold" ng-model="inner.key">
             <button class="btn btn-sm btn-danger pull-right" ng-click="$ctrl.remove(outer, inner)">-</button>
             <input class="form-control" type="text" ng-model="inner.value">
           </div>
+          <div style="clear: both;"></div>
       </form>
       </div>
     </div>
@@ -66,6 +78,15 @@
       <iframe src="https://appetize.io/embed/r6n8nrghd70xaqkuag9tu1695w?device=iphone5s&scale=100&autoplay=false&orientation=portrait&deviceColor=black"
         height="800px" width="378px" frameborder="0" scrolling="no"></iframe>
     </div>-->
+  </div>
+</div>
+<div class="container-fluid" style="{{$ctrl.style}}" ng-show="$ctrl.code">
+  <div class="row">
+    <div class="col-lg-12">
+      <h3>Representation <button class="btn" type="button" ng-click="$ctrl.save()">Set as override</button></h3>
+      <hr />
+      <textarea class="form-control" ng-model="$ctrl.codeModel" rows="{{$ctrl.numberOfRows}}" />
+    </div>
   </div>
 </div>
 <div class="container-fluid">
