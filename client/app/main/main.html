@@ -36,12 +36,9 @@
           </div>
         </fieldset>
       </form>
-      <hr />
     </div>
   </div>
-</div>
-<hr />
-<div class="container-fluid" style="{{$ctrl.style}}">
+  <hr />
   <div class="row">
     <div class="col-lg-12">
       <div class="btn-group" style="display: block;" role="group">
@@ -50,9 +47,7 @@
       </div>
     </div>
   </div>
-</div>
-<div class="container-fluid" style="{{$ctrl.style}}" ng-show="$ctrl.design">
-  <div class="row">
+  <div class="row" ng-show="$ctrl.design">
     <div class="col-lg-12">
       <h3 class="text-info">{{$ctrl.error}}</h3>
       <form class="form">
@@ -71,25 +66,21 @@
             <input class="form-control" type="text" ng-model="inner.value">
           </div>
           <div style="clear: both;"></div>
+        </div>
       </form>
-      </div>
     </div>
     <!--<div class="col-lg-4">
       <iframe src="https://appetize.io/embed/r6n8nrghd70xaqkuag9tu1695w?device=iphone5s&scale=100&autoplay=false&orientation=portrait&deviceColor=black"
         height="800px" width="378px" frameborder="0" scrolling="no"></iframe>
     </div>-->
   </div>
-</div>
-<div class="container-fluid" style="{{$ctrl.style}}" ng-show="$ctrl.code">
-  <div class="row">
+  <div class="row" ng-show="$ctrl.code">
     <div class="col-lg-12">
       <h3>Representation <button class="btn" type="button" ng-click="$ctrl.save()">Set as override</button></h3>
       <hr />
-      <textarea class="form-control" ng-model="$ctrl.codeModel" rows="{{$ctrl.numberOfRows}}" />
+      <textarea class="form-control" ng-model="$ctrl.codeModel" rows="{{$ctrl.numberOfRows}}"></textarea>
     </div>
   </div>
-</div>
-<div class="container-fluid">
   <div class="row">
     <div class="col-lg-12">
       <h1 class="page-header">Last configs managed:</h1>
