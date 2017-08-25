@@ -55,9 +55,14 @@ export default function() {
               console.error(er);
             });
           } else {
-            let interceptResponse = JSON.parse(intercept.response);
-            interceptResponse.response.sessionID = body.response.sessionID;
-            body = interceptResponse;
+            try {
+              let interceptResponse = JSON.parse(intercept.response);
+              interceptResponse.response.sessionID = body.response.sessionID;
+              body = interceptResponse;
+            } catch(e) {
+              body = {};
+              console.error(e);
+            }
           }
           resp.status(response.statusCode).json(body);
         }
